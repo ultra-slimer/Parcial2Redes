@@ -6,7 +6,6 @@ public class CharacterInputHandler : MonoBehaviour
     float _horizontalMovement;
     bool _isJumpPressed;
     bool _isFirePressed;
-    bool _crouchPressed;
 
     NetworkInputData _inputData;
 
@@ -29,11 +28,6 @@ public class CharacterInputHandler : MonoBehaviour
         {
             _isFirePressed = true;
         }
-
-        if (Input.GetKeyDown(KeyCode.LeftControl))
-        {
-            _crouchPressed = true;
-        }
     }
 
     public NetworkInputData GetNetworkInputs()
@@ -45,9 +39,6 @@ public class CharacterInputHandler : MonoBehaviour
 
         _inputData.isFirePressed = _isFirePressed;
         _isFirePressed = false;
-
-        _inputData.isCrouchPressed = _crouchPressed;
-        _crouchPressed = false;
 
         return _inputData;
     }

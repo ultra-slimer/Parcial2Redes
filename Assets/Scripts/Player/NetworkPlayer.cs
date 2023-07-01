@@ -28,7 +28,7 @@ public class NetworkPlayer : NetworkBehaviour
 
             Debug.Log("[Custom Msg] ''Local'' Player Spawned");
 
-            RPC_SetNickname("Player " + UnityEngine.Random.Range(1, 1001));
+            RPC_SetNickname("John Doe " + UnityEngine.Random.Range(1, 1001));
         }
         else
         {

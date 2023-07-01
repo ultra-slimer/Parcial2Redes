@@ -241,7 +241,7 @@ MonoBehaviour:
   Config: 1
   BroadRadius: 1.71225
   Offset: {x: 0, y: 0, z: 0}
-  GizmosColor: {r: 1, g: 1, b: 1, a: 1}
+  GizmosColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
   Hitboxes:
   - {fileID: 5940401079088057873}
 --- !u!1 &2451897091483024320
