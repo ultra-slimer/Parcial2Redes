@@ -14,6 +14,7 @@ public class NetworkCharacterControllerCustom : NetworkTransform {
   public float braking       = 10.0f;
   public float maxSpeed      = 2.0f;
   public float rotationSpeed = 15.0f;
+  public float originalColliderHeight;
 
   [Networked]
   [HideInInspector]
@@ -78,6 +79,22 @@ public class NetworkCharacterControllerCustom : NetworkTransform {
       Velocity =  newVel;
     }
   }
+
+    public virtual void Crouch(bool isCrouching)
+    {
+        if (isCrouching)
+        {
+            Controller.height = 0.5f;
+
+            //Controller.center = new Vector3(Controller.center.x, originalColliderHeight / 4f, Controller.center.z);
+        }
+        else
+        {
+            Controller.height = originalColliderHeight;
+
+            //Controller.center = new Vector3(Controller.center.x, originalColliderHeight / 2f, Controller.center.z);
+        }
+    }
 
     /// <summary>
     /// Basic implementation of a character controller's movement function based on an intended direction.

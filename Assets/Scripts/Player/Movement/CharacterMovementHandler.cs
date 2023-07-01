@@ -11,6 +11,7 @@ public class CharacterMovementHandler : NetworkBehaviour
     NetworkMecanimAnimator _myCharacterAnimator;
 
     float _movementValue;
+    private bool isCrouching = false;
 
     private void Awake()
     {
@@ -57,6 +58,11 @@ public class CharacterMovementHandler : NetworkBehaviour
             //}
 
             _myCharacterAnimator.Animator.SetFloat("MovementValue", _movementValue);
+        }
+
+        if(networkInputData.isCrouchPressed)
+        {
+            _myCharacterController.Crouch(isCrouching = !isCrouching);
         }
     }
 
