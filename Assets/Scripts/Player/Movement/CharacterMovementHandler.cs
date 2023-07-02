@@ -76,4 +76,10 @@ public class CharacterMovementHandler : NetworkBehaviour
     {
         _myCharacterController.Controller.enabled = isEnabled;
     }
+    public void SetPosition(Vector3 newPosition)
+    {
+        print("SetPOsition");
+        _myCharacterController.TeleportToPosition(newPosition);
+        //_rgbd.Rigidbody.position.Set(newPosition.x, newPosition.y, newPosition.z);
+    }
 }
