@@ -7,14 +7,18 @@ using Fusion.Sockets;
 using UnityEngine.SceneManagement;
 using System.Threading.Tasks;
 
+
 public class NetworkRunnerHandler : MonoBehaviour, INetworkRunnerCallbacks
 {
     [SerializeField] NetworkRunner _runnerPrefab;
 
     NetworkRunner _currentRunner;
+    CharacterInputHandler _characterInputHandler;
 
     public event Action OnJoinedLobby = delegate { };
     public event Action<List<SessionInfo>> OnSessionListUpdate = delegate { };
+    private int connectionCount = 0;
+    private bool canStartGame = false;
 
     #region Lobby
     public void JoinLobby()
@@ -35,6 +39,13 @@ public class NetworkRunnerHandler : MonoBehaviour, INetworkRunnerCallbacks
     {
         //Le pedimos a nuestro NetworkRunner que nos agregue a un Lobby propio
         var result = await _currentRunner.JoinSessionLobby(SessionLobby.Custom, "Normal Lobby");
+        connectionCount++;
+
+        if (connectionCount == 2)
+        {
+            canStartGame = true;
+        }
+
 
         //Una vez se complete la tarea de entrar a un Lobby, chequeamos si hubo algun problema
         if (!result.Ok)
@@ -69,15 +80,16 @@ public class NetworkRunnerHandler : MonoBehaviour, INetworkRunnerCallbacks
 
         runner.ProvideInput = true;
 
-        var result = await runner.StartGame(new StartGameArgs
+        StartGameResult result;
+        result = await runner.StartGame(new StartGameArgs
         {
             GameMode = gameMode,
             Scene = scene,
             SessionName = sessionName,
             CustomLobbyName = "Normal Lobby",
-            SceneManager = sceneManager
+            SceneManager = sceneManager,
+            SessionProperties = { { "canStart", SessionProperty.Convert(false) } }
         });
-
         if (!result.Ok)
         {
             Debug.LogError("[Custom Error] Unable to start game");
@@ -89,22 +101,18 @@ public class NetworkRunnerHandler : MonoBehaviour, INetworkRunnerCallbacks
     }
 
     #endregion
+    public event Action OnMultipleSessions = delegate { };
 
     public void OnSessionListUpdated(NetworkRunner runner, List<SessionInfo> sessionList)
     {
-        //Si hay alguna sesion ya creada, entramos automaticamente a la primera
-
         OnSessionListUpdate(sessionList);
 
-        //if (sessionList.Count > 0)
-        //{
-        //    SessionInfo session = sessionList[0];
-
-        //    Debug.Log($"[Custom Msg] Joining {session.Name}");
-
-        //    JoinGame(session);
-        //}
+        if (sessionList.Count > 1)
+        {
+            OnMultipleSessions();
+        }
     }
+
 
     #region Unused Callbacks
     public void OnConnectedToServer(NetworkRunner runner) { }

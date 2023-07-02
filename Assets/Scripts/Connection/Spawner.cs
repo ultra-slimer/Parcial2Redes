@@ -1,8 +1,10 @@
 using System.Collections.Generic;
+using System.Collections;
 using UnityEngine;
 using Fusion;
 using Fusion.Sockets;
 using System;
+using System.Linq;
 
 public class Spawner : MonoBehaviour, INetworkRunnerCallbacks
 {
@@ -17,24 +19,15 @@ public class Spawner : MonoBehaviour, INetworkRunnerCallbacks
         {
             Debug.Log("Player Joined, I'm the server/host");
             runner.Spawn(_playerPrefab, null, null, player);
+                CharacterInputHandler._canPlay = true;
         }
         else
         {
+            if (runner.ActivePlayers.Count() >= 2)
+            {
+                CharacterInputHandler._canPlay = true;
+            }
             Debug.Log("Player Joined, I'm not the server/host");
-        }
-    }
-
-    public void OnInput(NetworkRunner runner, NetworkInput input)
-    {
-        if (!NetworkPlayer.Local) return;
-
-        if (!_characterInputHandler)
-        {
-            _characterInputHandler = NetworkPlayer.Local.GetComponent<CharacterInputHandler>();
-        }
-        else
-        {
-            input.Set(_characterInputHandler.GetNetworkInputs());
         }
     }
 
@@ -58,6 +51,8 @@ public class Spawner : MonoBehaviour, INetworkRunnerCallbacks
     public void OnReliableDataReceived(NetworkRunner runner, PlayerRef player, ArraySegment<byte> data) { }
     public void OnSceneLoadDone(NetworkRunner runner) { }
     public void OnSceneLoadStart(NetworkRunner runner) { }
+
+    public void OnInput(NetworkRunner runner, NetworkInput input) { }
 
     #endregion
 }

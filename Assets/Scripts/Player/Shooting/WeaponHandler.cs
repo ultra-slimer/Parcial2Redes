@@ -8,6 +8,7 @@ public class WeaponHandler : NetworkBehaviour
     [SerializeField] Bullet _bulletPrefab;
     [SerializeField] Transform _firingTransform;
     [SerializeField] ParticleSystem _shootParticle;
+    private NetworkPlayer local;
 
     [Networked(OnChanged = nameof(OnFiringChange))]
     bool IsFiring { get; set; }
@@ -19,11 +20,12 @@ public class WeaponHandler : NetworkBehaviour
     private void Awake()
     {
         _lifeHandler = GetComponent<LifeHandler>();
+        local = GetComponent<NetworkPlayer>();
     }
 
     public override void FixedUpdateNetwork()
     {
-        if (_lifeHandler.IsDead) return;
+        if (_lifeHandler.IsDead || !local.HasInputAuthority) return;
 
         if (GetInput(out NetworkInputData networkInputData))
         {
