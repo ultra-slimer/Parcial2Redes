@@ -749,6 +749,26 @@ PrefabInstance:
       propertyPath: m_Name
       value: Level
       objectReference: {fileID: 0}
+    - target: {fileID: 6736124185703744108, guid: 1244c96c897c97f4b8f7f0d676091d53, type: 3}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6736124185703744108, guid: 1244c96c897c97f4b8f7f0d676091d53, type: 3}
+      propertyPath: m_ReceiveShadows
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6736124185705781774, guid: 1244c96c897c97f4b8f7f0d676091d53, type: 3}
+      propertyPath: m_Size.x
+      value: 5.9576144
+      objectReference: {fileID: 0}
+    - target: {fileID: 6736124185705781774, guid: 1244c96c897c97f4b8f7f0d676091d53, type: 3}
+      propertyPath: m_Center.x
+      value: 0.56174165
+      objectReference: {fileID: 0}
+    - target: {fileID: 6736124185706168460, guid: 1244c96c897c97f4b8f7f0d676091d53, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 8
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1244c96c897c97f4b8f7f0d676091d53, type: 3}
 --- !u!1 &1744867045
