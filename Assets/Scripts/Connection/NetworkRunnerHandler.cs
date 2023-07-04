@@ -6,6 +6,7 @@ using Fusion;
 using Fusion.Sockets;
 using UnityEngine.SceneManagement;
 using System.Threading.Tasks;
+using System.Linq;
 
 
 public class NetworkRunnerHandler : MonoBehaviour, INetworkRunnerCallbacks
@@ -87,8 +88,7 @@ public class NetworkRunnerHandler : MonoBehaviour, INetworkRunnerCallbacks
             Scene = scene,
             SessionName = sessionName,
             CustomLobbyName = "Normal Lobby",
-            SceneManager = sceneManager,
-            SessionProperties = { { "canStart", SessionProperty.Convert(false) } }
+            SceneManager = sceneManager
         });
         if (!result.Ok)
         {
@@ -131,7 +131,18 @@ public class NetworkRunnerHandler : MonoBehaviour, INetworkRunnerCallbacks
 
     public void OnInputMissing(NetworkRunner runner, PlayerRef player, NetworkInput input) { }
 
-    public void OnPlayerJoined(NetworkRunner runner, PlayerRef player) { }
+    public void OnPlayerJoined(NetworkRunner runner, PlayerRef player) {
+        print(runner.ActivePlayers.Count());
+        if (runner.ActivePlayers.Count() >= 2)
+        {
+            foreach (var a in FindObjectsOfType<CharacterInputHandler>())
+            {
+                print(a.gameObject.name);
+                a._canPlay = true;
+                a.ToggleInputs();
+            }
+        }
+    }
 
     public void OnPlayerLeft(NetworkRunner runner, PlayerRef player) { }
 

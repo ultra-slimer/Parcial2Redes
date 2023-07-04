@@ -9,8 +9,7 @@ public class CharacterInputHandler : MonoBehaviour
     bool _isFirePressed;
     bool _isCrouchPressed;
     [Networked(OnChanged = nameof(ToggleInputs))]
-    public static bool _canPlay { get; set; }
-    private bool canPlay { get; set; }
+    public bool _canPlay { get; set; }
     private delegate void controls();
     private controls Controls = delegate { };
 
@@ -25,12 +24,27 @@ public class CharacterInputHandler : MonoBehaviour
 
     void Update()
     {
-        Controls();
+        Controls(); 
+        _horizontalMovement = Input.GetAxis("Horizontal");
+
+        if (Input.GetKeyDown(KeyCode.W))
+        {
+            _isJumpPressed = true;
+        }
+        else if (Input.GetKeyDown(KeyCode.Space))
+        {
+            _isFirePressed = true;
+        }
+
+        if (Input.GetKeyDown(KeyCode.LeftControl))
+        {
+            _isCrouchPressed = true;
+        }
     }
 
-    private void ToggleInputs()
+    public void ToggleInputs()
     {
-        print("Toggle controllers");
+        /*print("Toggle controllers");
         if (_canPlay)
         {
             Controls = delegate {
@@ -55,7 +69,7 @@ public class CharacterInputHandler : MonoBehaviour
         else
         {
             Controls = delegate { };
-        }
+        }*/
     }
 
     public NetworkInputData GetNetworkInputs()

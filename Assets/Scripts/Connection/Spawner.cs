@@ -19,15 +19,15 @@ public class Spawner : MonoBehaviour, INetworkRunnerCallbacks
         {
             Debug.Log("Player Joined, I'm the server/host");
             runner.Spawn(_playerPrefab, null, null, player);
-                CharacterInputHandler._canPlay = true;
+            if(runner.ActivePlayers.Count() >= 2)
+            {
+                Time.timeScale = 1;
+            }
         }
         else
         {
-            if (runner.ActivePlayers.Count() >= 2)
-            {
-                CharacterInputHandler._canPlay = true;
-            }
             Debug.Log("Player Joined, I'm not the server/host");
+            Time.timeScale = 1;
         }
     }
 
@@ -35,7 +35,19 @@ public class Spawner : MonoBehaviour, INetworkRunnerCallbacks
     {
         runner.Shutdown();
     }
+    public void OnInput(NetworkRunner runner, NetworkInput input)
+    {
+        if (!NetworkPlayer.Local) return;
 
+        if (!_characterInputHandler)
+        {
+            _characterInputHandler = NetworkPlayer.Local.GetComponent<CharacterInputHandler>();
+        }
+        else
+        {
+            input.Set(_characterInputHandler.GetNetworkInputs());
+        }
+    }
     #region Unused callbacks
 
     public void OnPlayerLeft(NetworkRunner runner, PlayerRef player) { }
@@ -50,9 +62,11 @@ public class Spawner : MonoBehaviour, INetworkRunnerCallbacks
     public void OnHostMigration(NetworkRunner runner, HostMigrationToken hostMigrationToken) { }
     public void OnReliableDataReceived(NetworkRunner runner, PlayerRef player, ArraySegment<byte> data) { }
     public void OnSceneLoadDone(NetworkRunner runner) { }
-    public void OnSceneLoadStart(NetworkRunner runner) { }
+    public void OnSceneLoadStart(NetworkRunner runner) {
+        Time.timeScale = 0.000000001f;
+    }
 
-    public void OnInput(NetworkRunner runner, NetworkInput input) { }
+    //public void OnInput(NetworkRunner runner, NetworkInput input) { }
 
     #endregion
 }
